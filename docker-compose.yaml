@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  address-book:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: address-book
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - db-data:/app/data
+    environment:
+      # You can override the DB path if you ever want a different location
+      DATABASE_URL: "sqlite:////app/data/addresses.db"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  db-data:
+    name: address-book-db
