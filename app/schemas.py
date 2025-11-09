@@ -17,17 +17,17 @@ class AddressCreate(AddressBase):
 
     @field_validator("latitude")
     @classmethod
-    def validate_latitude(cls, v: float) -> float:
-        if not -90 <= v <=90:
+    def validate_latitude(cls, latitude: float) -> float:
+        if not -90 <= latitude <=90:
             raise ValueError("Latitude must be between -90 and 90")
-        return v
+        return latitude
     
     @field_validator("longitude")
     @classmethod
-    def validate_longitude(cls, v:float) -> float:
-        if not -180 <= v <= 180:
+    def validate_longitude(cls, longitude:float) -> float:
+        if not -180 <= longitude <= 180:
             raise ValueError("Longitude must be between -180 and 180")
-        return v
+        return longitude
     
 class AddressUpdate(BaseModel):
     """Schema for partial address updates."""
@@ -42,17 +42,17 @@ class AddressUpdate(BaseModel):
 
     @field_validator("latitude")
     @classmethod
-    def validate_latitude(cls, v: float | None) -> float | None:
-        if v is not None and not -90 <= v <= 90:
+    def validate_latitude(cls, latitude: float | None) -> float | None:
+        if latitude is not None and not -90 <= latitude <= 90:
             raise ValueError("Latitude must be between -90 and 90")
-        return v
+        return latitude
     
     @field_validator("longitude")
     @classmethod
-    def validate_longitude(cls, v: float | None) -> float | None:
-        if v is not None and not -180 <= v <= 180:
+    def validate_longitude(cls, longitude: float | None) -> float | None:
+        if longitude is not None and not -180 <= longitude <= 180:
             raise ValueError("Longitude must be between -180 and 180")
-        return v
+        return longitude
         
 class Address(AddressBase):
     """Response schema - includes DB-generated ID."""
