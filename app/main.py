@@ -4,19 +4,25 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.database import engine, get_db
 
-# Configure logging
+# ---------- Logging ----------
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
 )
 logger = logging.getLogger(__name__)
 
-# Create tables
-models.Base.metadata.create_all(bind=engine)
+# ---------- CREATE TABLES SAFELY ----------
+try:
+    models.Base.metadata.create_all(bind=engine)
+    logger.info("Database tables are ready.")
+except Exception as e:
+    logger.error(f"Could not create tables: {e}")
+    raise  # stop the app – you must see the error
 
-app =FastAPI(
+# ---------- FastAPI app ----------
+app = FastAPI(
     title="Address Book API",
-    description="CRUD + geospatial search for addresses with coordinates. Uses SQLite and Haversine distance.",
+    description="CRUD + geospatial search (SQLite + Haversine)",
     version="1.0.0",
 )
 
@@ -24,7 +30,7 @@ app =FastAPI(
 def root():
     return {"message": "Welcome  to Address Book API - see /docs for Swagger UI"}
 
-app.post("/addresses/", 
+@app.post("/addresses/", 
          response_model=schemas.Address, 
          tags=["addresses"], 
          summary="Create address", 
