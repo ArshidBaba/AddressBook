@@ -12,7 +12,6 @@ services:
     volumes:
       - db-data:/app/data
     environment:
-      # You can override the DB path if you ever want a different location
       DATABASE_URL: "sqlite:////app/data/addresses.db"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/"]
